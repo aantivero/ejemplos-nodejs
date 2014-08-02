@@ -15,6 +15,11 @@ var mimeTypes = {
 http.createServer(function (request, response) {
     var lookup = path.basename(decodeURI(request.url)) || 'index.html';
     var f = 'content/' + lookup;
+    if (request.url === '/favicon.ico') {
+        console.log('No se encuentra ' + f);
+        response.end();
+        return;
+    }
     fs.exists(f, function (exists) {
        if (exists) {
            fs.readFile(f, function (err, data) {
