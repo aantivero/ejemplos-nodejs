@@ -6,14 +6,16 @@ var path = require('path');
 
 //array con las rutas
 var pages = [
-    {route: '', output: 'Wow Nodejs'},
-    {route: 'about', output: 'Otro ejemplo de enrutar con nodejs'},
-    {route: 'another page', output: function () {
+    {route: '/', output: 'Wow Nodejs'},
+    {route: '/about', output: 'Otro ejemplo de enrutar con nodejs'},
+    {route: '/about/node', output: 'fullstack I/O basado en V8'},
+    {route: '/about/this', output: 'enrutamiento multilevel nodejs'},
+    {route: '/another page', output: function () {
         return 'Here\'s' + this.route;
     }}];
 
 http.createServer(function (request, response) {
-    var lookup = path.basename(decodeURI(request.url));
+    var lookup = decodeURI(request.url);
     //vamos a recorrer el array hasta encontrar el correspondiente, caso contrario un 404
     pages.forEach(function (page) {
         if (page.route === lookup) {
