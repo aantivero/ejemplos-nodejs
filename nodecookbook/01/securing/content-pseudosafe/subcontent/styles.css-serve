@@ -1,0 +1,6 @@
+#yay {
+    front-size: 5em;
+    background: blue;
+    color: yellowgreen;
+    padding: 0.5em;
+}
