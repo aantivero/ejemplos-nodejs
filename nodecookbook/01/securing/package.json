@@ -1,0 +1,15 @@
+{
+  "name": "securing",
+  "version": "0.0.0",
+  "description": "ejemplo de seguridad del capitulo 1 ",
+  "main": "node-static_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Alejandro Antivero",
+  "license": "BSD",
+  "dependencies": {
+    "node-static": "~0.7.4"
+  }
+}
