@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Put Upload Form</title>
+</head>
+<body>
+    <form id="frm">
+        <input type="file" id="userfile" name="userfile">
+        <input type="submit">
+    </form>
+    <script>
+        (function(){
+            var userfile = document.getElementById('userfile');
+            var frm = document.getElementById('frm');
+            var file;
+            userfile.addEventListener('change', function (){
+                file = this.files[0];
+            });
+            frm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (file) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.file = file;
+                    xhr.open('put', window.location, true);
+                    xhr.setRequestHeader("x-uploadedfilename", file.fileName || file.name);
+                    xhr.send(file);
+                    file = '';
+                    frm.reset();
+                }
+            });
+        }());
+    </script>
+</body>
+</html>
