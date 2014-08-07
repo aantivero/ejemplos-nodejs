@@ -13,6 +13,7 @@ http.createServer(function (request, response) {
        incoming.uploadDir = 'uploads';
        incoming.on('fileBegin', function (field, file) {
             //esto preserva el nombre del archivo porque formidable genera un nombre aleatorio hexadecimal
+           //hacemos un append del nombre original al final del random asignado por formidable
                if (file.name) {
                    file.path += "-" + file.name;
                }
@@ -27,7 +28,7 @@ http.createServer(function (request, response) {
            }).on('end', function () {
                response.end('Todos los archivos fueron recibidos');
            });
-       }
+
        incoming.parse(request);
    }
    if (request.method === 'GET') {
