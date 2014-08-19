@@ -4,7 +4,7 @@
  */
 var http = require('http');
 var urlOpts = {
-    host: 'http://www.nodejs.org',
+    host: 'www.nodejs.org',
     path: '/',
     port: 80
 };
