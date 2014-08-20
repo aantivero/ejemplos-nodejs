@@ -1,0 +1,8 @@
+{
+  "name": "express-router-experiments",
+  "main": "server.js",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "^4.8.5"
+  }
+}
