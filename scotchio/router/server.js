@@ -53,6 +53,20 @@ router.get('/hola/:nombre', function(req, res){
     //con el middleware param se lo toma sin params
     res.send('Hola ' + req.nombre + '!');
 });
+/**
+ * Login Routes app.route es un shortcut para llamar al Express Router en lugar de llamar express.Router()
+ * se puede llamar app.route y declarar lo necesario ahi dentro
+ */
+app.route('/login')
+    //muestra el form GET localhost:8080/login
+    .get(function(req, res){
+        console.log('get login');
+        res.send('Este es el formulario de login');
+    })
+    .post(function(req, res){
+        console.log('login procesado');
+        res.send('Fue procesado el formulario de login');
+    });
 app.use('/', router);
 //la anterior puede cambiar por ejemplo app.use('/app', router) -> localhost:8080/app/about o localhost:8080/app/
 //de esta manera podemos crear varios routes
