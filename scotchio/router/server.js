@@ -34,6 +34,12 @@ router.get('/', function (req, res){
 router.get('/about', function(req, res){
    res.send('Esta es la pagina sobre nosotros');
 });
+/**
+ * Router con parametros localhost:8080/hola/:nombre
+ */
+router.get('/hola/:nombre', function(req, res){
+    res.send('Hola ' + req.params.nombre + '!');
+});
 app.use('/', router);
 //la anterior puede cambiar por ejemplo app.use('/app', router) -> localhost:8080/app/about o localhost:8080/app/
 //de esta manera podemos crear varios routes
