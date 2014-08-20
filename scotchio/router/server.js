@@ -13,5 +13,19 @@ app.get('/sample', function(req, res){
 });
 //proximo routes aqui
 
+//obtener una instancia de Router
+var router = express.Router();
+//home
+router.get('/', function (req, res){
+   res.send('Esta es la pagina de inicio');
+});
+//about
+router.get('/about', function(req, res){
+   res.send('Esta es la pagina sobre nosotros');
+});
+app.use('/', router);
+//la anterior puede cambiar por ejemplo app.use('/app', router) -> localhost:8080/app/about o localhost:8080/app/
+//de esta manera podemos crear varios routes
+
 app.listen(port);
 console.log('La aplicación esta corriendo en el puerto ' + port);
