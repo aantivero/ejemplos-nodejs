@@ -15,6 +15,17 @@ app.get('/sample', function(req, res){
 
 //obtener una instancia de Router
 var router = express.Router();
+/**
+ * Middleware es la forma de hacer algo antes que el request se procese
+ * por ejemplo chequeo de autenticacion, logeo de datos para analisis o cualquier otra cosa
+ * lo que vamos a hacer es logear siempre que llegue un request solo para el objeto router
+ */
+router.use(function(req, res, next){
+   //logear cada request por la consola
+    console.log(req.method, req.url);
+    //continuar con lo que debe hacer
+    next();
+});
 //home
 router.get('/', function (req, res){
    res.send('Esta es la pagina de inicio');
