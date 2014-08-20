@@ -35,10 +35,23 @@ router.get('/about', function(req, res){
    res.send('Esta es la pagina sobre nosotros');
 });
 /**
+ * podemos agregar una validacion en el middleware para comprobar el campo :nombre
+ * En el caso de crear un api rest podemos validar un token por ejemplo
+ */
+router.param('nombre', function(req, res, next, nombre){
+   //hacer una validacion del campo nombre aca
+    console.log('ejecutando alguna validacion con el campo nombre ' + nombre);
+    //cuando la validacion esta ok se guarda el item en el request
+    req.nombre = nombre + ' zaraza ';
+    //ejecutar el proximo
+    next();
+});
+/**
  * Router con parametros localhost:8080/hola/:nombre
  */
 router.get('/hola/:nombre', function(req, res){
-    res.send('Hola ' + req.params.nombre + '!');
+    //con el middleware param se lo toma sin params
+    res.send('Hola ' + req.nombre + '!');
 });
 app.use('/', router);
 //la anterior puede cambiar por ejemplo app.use('/app', router) -> localhost:8080/app/about o localhost:8080/app/
