@@ -1,0 +1,14 @@
+Inicio con MEAN Stack
+=====================
+
+Voy a comenzar con desarrollar un ejemplo de como sería un stack MEAN
+(Node.js, Express, AngularJS y MongoDB)
+[el tutorial en scotch.io](http://scotch.io/bar-talk/setting-up-a-mean-stack-single-page-application)
+Este sirve de ejemplo para [mean.io](http://mean.io) y [meanjs.org](http://meanjs.org)
+
+Siguiendo los pasos del tutorial para crear una aplicación para manejar tareas.
+* SPA Single Page Application.
+* Node.js como backend con Express y MongoDB.
+* AngularJS en el frontend.
+* Modularizacion de componentes con Angular(controller y services).
+* Mejor estructura para que nuestra aplicación pueda crecer.

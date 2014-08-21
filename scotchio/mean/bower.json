@@ -1,0 +1,25 @@
+{
+  "name": "starter-node-angular",
+  "version": "0.0.0",
+  "homepage": "https://github.com/aantivero/ejemplos-nodejs",
+  "authors": [
+    "Alejandro Antivero <alejandro.antivero@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "font-awesome": "~4.1.0",
+    "animate.css": "~3.2.0",
+    "angular": "~1.2.22",
+    "angular-route": "~1.2.22"
+  }
+}
