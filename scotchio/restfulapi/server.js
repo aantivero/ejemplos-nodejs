@@ -32,12 +32,87 @@ var port = process.env.PORT || 8080;
  */
 var router = express.Router(); //obtener una instancia de express Router
 
+//middleware para todos los Routes
+router.use(function(req, res, next){
+   //logear la llamada al middleware
+   console.log(req.method, req.url);
+   //continuar
+   next();
+});
+
 //primer router para poder testear nuestra api GET http://localhost:8080/api
 router.get('/', function(req, res){
    res.json({message: 'Bienvenido al api RESTful con Node.js'}); 
 });
 //mas api aqui
-
+/**
+ * vamos a expresar las rutas 
+ * /api/tareas GET obtener todas las tareas
+ * /api/tareas POST crear una nueva tarea
+ * /api/tareas/:tarea_id GET obtener una tarea
+ * /api/tareas/:tarea_id PUT modificar una tarea 
+ * /api/tareas/:tarea_id DELETE borrar una tarea
+ */
+router.route('/tareas')
+    //crear una tarea
+    .post(function(req, res){
+        var tarea = new Tarea();
+        tarea.titulo = req.body.titulo;
+        tarea.author = req.body.author;
+        tarea.descripcion = req.body.descripcion;
+        tarea.save(function(err){
+           if (err) 
+               res.send(err);
+           res.json({message: 'La tarea ' + tarea.titulo + ' fue creada.'});
+        });
+    })
+    //obtener todas las tareas
+    .get(function(req, res){
+        Tarea.find(function(err, tareas){
+           if(err)
+               res.send(err);
+           res.json(tareas);
+        });
+    });
+//tarea por parametro
+router.route('/tareas/:tarea_id')
+    //devolver la tarea por id
+    .get(function(req, res){
+        Tarea.findById(req.params.tarea_id, function(err, tarea){
+           if(err)
+               res.send(err);
+           if(!tarea)
+               res.json({message: 'La Tarea no se encuentra.'});
+           res.json(tarea);
+        });
+    })
+    //actualizar la informacion de una tarea
+    .put(function(req, res){
+        //primero buscamos la tarea que modificamos
+        Tarea.findById(req.params.tarea_id, function(err, tarea){
+           if(err)
+               res.send(err);
+           tarea.titulo = req.body.titulo;
+           tarea.author = req.body.author;
+           tarea.descripcion = req.body.descripcion;
+           tarea.fecha = Date.now();
+           tarea.save(function(err){
+              if(err)
+                  res.send(err);
+              res.json({message: 'La tarea fue actualizada '});
+           });
+        });
+    })
+    //eliminar una tarea por id
+    .delete(function(req, res){
+        Tarea.remove({
+            _id: req.params.tarea_id
+        }, function(err, tarea){
+           if(err) 
+               res.send(err);
+           res.json({message: 'La tarea fue eliminada'});
+        });
+    });
 //registrar el router en nuestro server
 app.use('/api', router);
 
