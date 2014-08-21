@@ -1,0 +1,8 @@
+RESTful API con Node.js
+=======================
+
+Ejemplo de como crear un API RESTful con Nodejs, Express 4 (Router).
+También utilizando Mongoose para interactura con una base MongoDB.
+
+[Diseñar un API REST](http://scotch.io/bar-talk/designing-a-restful-web-api)
+[RESTful API tutorial](http://scotch.io/tutorials/javascript/build-a-restful-api-using-node-and-express-4)
