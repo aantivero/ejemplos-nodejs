@@ -6,6 +6,18 @@ var express = require('express');
 //inicializando la aplicacion
 var app = express();
 var bodyParser = require('body-parser');
+//mongoose para coneccion a mongodb
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+//verificar que la coneccion funciona
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'error en la coneccion db'));
+db.on('open', function callback(){
+   console.log('la coneccion esta abierta'); 
+});
+
+//vamos a importar la tarea del modelo
+var Tarea = require('./app/models/tarea');
 
 //configurar la aplicacion para utilizar body-parser()
 //esto nos va a permitir obtener los datos de un POST
