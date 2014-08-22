@@ -14,7 +14,7 @@ module.exports = function(app, passport) {
   app.post('/login', passport.authenticate('local-login', {
       successRedirect : '/profile', //redirige al profile
       failureRedirect : '/login', //si hay error vuelve al login
-      failuresFlash : true //muestran mensajes de error
+      failureFlash : true //muestran mensajes de error
   }));
   
   //--signup - registracion en la aplicacion

@@ -71,9 +71,9 @@ module.exports = function(passport) {
             done(err);
         //no se encuentra el usuario
         if (!user)
-            return done(null, false, req.flash('login.Message', 'Usuario no encontrado'));
+            return done(null, false, req.flash('loginMessage', 'Usuario no encontrado'));
         if (!user.validarPassword(password))
-            return done(null, false, req.flash('login.Message', 'Error al ingresar la password no coincide'));
+            return done(null, false, req.flash('loginMessage', 'Error al ingresar la password no coincide'));
         
         //si todo esta ok devuelve success
         return done(null, user);

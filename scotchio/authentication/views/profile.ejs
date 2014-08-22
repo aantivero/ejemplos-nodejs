@@ -1,0 +1,40 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+    <head>
+        <title>Sistema de Autenticacion</title>
+        <!--bootstrap-->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <!-- font-awesome -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+        <style>
+            body {
+                padding-top: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header text-center">
+                <h1><span class="fa fa-anchor"></span> P&aacute;gina de Perfil</h1>
+                <a href="/logout" class="btn btn-default btn-sm">Salir</a>
+            </div>
+            
+            <div class="row">
+                <!-- Informacion Local -->
+		<div class="col-sm-6">
+			<div class="well">
+				<h3><span class="fa fa-user"></span> Local</h3>
+
+					<p>
+						<strong>id</strong>: <%= user._id %><br>
+						<strong>email</strong>: <%= user.local.email %><br>
+						<strong>password</strong>: <%= user.local.password %>
+					</p>
+
+			</div>
+		</div>
+            </div>
+        </div>
+    </body>
+</html>
