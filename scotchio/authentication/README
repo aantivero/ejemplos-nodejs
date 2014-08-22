@@ -1,0 +1,4 @@
+# Ejemplo de Autenticacion
+
+Aplicación de ejemplo usando autenticacion en Node.js, Express 4 y Passport
+El tutorial se puede encontrar en (http://scotch.io/series/easy-node-authentication)
