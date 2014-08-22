@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 //definicion del esquema
-var usuarioSchema = mongoose.schema({
+var usuarioSchema = mongoose.Schema({
    local : {
        email : String,
        password : String

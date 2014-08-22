@@ -11,14 +11,22 @@ module.exports = function(app, passport) {
      res.render('login.ejs', {message: req.flash('loginMessage')}); 
   });
   //procesar el login form
-  //app.post('/login', passport va a ejecutar aca
+  app.post('/login', passport.authenticate('local-login', {
+      successRedirect : '/profile', //redirige al profile
+      failureRedirect : '/login', //si hay error vuelve al login
+      failuresFlash : true //muestran mensajes de error
+  }));
   
   //--signup - registracion en la aplicacion
   app.get('/signup', function(req, res){
      res.render('signup.ejs', {message: req.flash('signupMessage')});
   });
-  //procesar el signup form
-  //app.post('/signup', passport hace su magia
+  //procesar el signup form - usando la estrategia local-signup
+  app.post('/signup', passport.authenticate('local-signup', {
+      successRedirect : '/profile', //redirige a la parte segura
+      failureRedirect : '/signup', //si hay error redirige a la pagina de registro
+      failureFlash : true //para mostrar mensajes de error
+  }));
   
   //--profile - protegido vamos a usar un middleware para chequear si esta logeado
   app.get('/profile', isLoggedIn, function(req, res){
