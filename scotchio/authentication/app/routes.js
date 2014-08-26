@@ -32,6 +32,14 @@ module.exports = function(app, passport) {
   app.get('/profile', isLoggedIn, function(req, res){
      res.render('profile.ejs', {user: req.user});//obtenemos el usario de la session y se lo pasamos al template
   });
+
+  // -- routes de FACEBOOK para authenticacion y login
+  app.get('/auth/facebook', passport.authenticate('facebook', {scope:'email'}));
+  //capturar el callback despues que facebook autentique al usuario
+  app.get('/auth/facebook/callback', passport.authenticate('facebook',{
+      successRedirect:'/profile',
+      failureRedirect:'/'
+  }));
   
   //--logout - salir
   app.get('/logout', function(req, res){

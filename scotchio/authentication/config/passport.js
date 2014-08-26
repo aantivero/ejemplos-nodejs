@@ -4,9 +4,14 @@
 
 //cargar lo necesario
 var LocalStrategy = require('passport-local').Strategy;
+//facebook strategy
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 //cargar el usuario
 var Usuario = require('../app/models/usuario');
+
+//cargar las variables de configuracion para auth
+var configAuth = require('./auth');
 
 //expone la funcion a la aplicacion
 module.exports = function(passport) {
@@ -79,4 +84,46 @@ module.exports = function(passport) {
         return done(null, user);
      });
   }));
+
+  // --- FACEBOOK STRATEGY
+  passport.use(new FacebookStrategy({
+      //poner en el app los datos de nuestra configuracion
+      clientID : configAuth.facebookAuth.clientID,
+      clientSecret : configAuth.facebookAuth.clientSecret,
+      callbackURL : configAuth.facebookAuth.callbackURL
+  },
+      //facebook nos reenvia el token y el profile
+      function(token, refreshToken, profile, done){
+          //asincronico
+          process.nextTick(function(){
+             //buscar en la base el usuario en base al facebook id
+              Usuario.findOne({'facebook.id':profile.id}, function(err, user){
+                 if (err)
+                    return done(err);
+                 if (user) {
+                     //si lo encuentra vamos a retornar el usuario
+                     return done(null, user);
+                 } else {
+                     //caso contrario vamos a crear uno nuevo y le seteamos la info necesaria
+                     var newUser = new Usuario();
+                     newUser.facebook.id = profile.id;
+                     //guardamos el token del usuario
+                     newUser.facebook.token = token;
+                     newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                     //puede traer mas de un email, nos quedamos con el primero
+                     newUser.facebook.email = profile.emails[0].value;
+
+                     //guardar el usuario
+                     newUser.save(function(err){
+                         if (err){
+                             throw err;
+                         }
+                         //ok devolvemos el usuario
+                         return done(null, newUser);
+                     });
+                 }
+              });
+          });
+      }
+  ))
 };
