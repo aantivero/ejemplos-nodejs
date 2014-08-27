@@ -49,7 +49,21 @@ module.exports = function(app, passport) {
       successRedirect: '/profile',
       failureRedirect: '/'
     }));
-
+    
+    // --- Routes de GOOGLE
+    //agregar el profile
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: [
+            'https://www.googleapis.com/auth/userinfo.profile', 
+            'https://www.googleapis.com/auth/userinfo.email']}), 
+        function(req, res){
+            console.log('paso');
+        });
+    //manejar el callback de google
+    app.get('/auth/google/callback', passport.authenticate('google',{
+        successRedirect:'/profile',
+        failureRedirect:'/'
+    }));
   
   //--logout - salir
   app.get('/logout', function(req, res){

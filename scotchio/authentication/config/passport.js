@@ -8,6 +8,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 //twitter strategy
 var TwitterStrategy = require('passport-twitter').Strategy;
+//google strategy
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 //cargar el usuario
 var Usuario = require('../app/models/usuario');
@@ -161,4 +163,38 @@ module.exports = function(passport) {
          });
       });
   }));
+  
+  //--- GOOGLE STRATEGY
+  passport.use('google',new GoogleStrategy({
+    clientID : configAuth.googleAuth.clientID,
+    clientSecret : configAuth.googleAuth.clientSecret,
+    callbackURL : configAuth.googleAuth.callbackURL
+  }), function(token, refreshToken, profile, done){
+    //realizarlo de forma asincronica
+        console.log('google strategy')
+        process.nextTick(function() {
+            Usuario.findOne({'google.id': profile.id}, function(err, user) {
+                if (err)
+                    return done(err);
+                if (user) {
+                    return done(null, user);
+                } else {
+                    //en caso de no estar creamos uno nuevo en la base de datos
+                    var newUser = new Usuario();
+                    newUser.google.id = profile.id;
+                    newUser.google.token = token;
+                    //nos quedamos con el primero
+                    newUser.google.email = profile.emails[0].value;
+                    newUser.google.name = profile.displayName;
+                    //guardar
+                    newUser.save(function(err){
+                       if (err)
+                           throw err;
+                       return done(null, newUser);
+                    });
+                }
+            });
+        });
+    
+  });
 };

@@ -14,8 +14,8 @@ module.exports = {
         'callbackURL' : 'http://127.0.0.1:8080/auth/twitter/callback'
     },
     'googleAuth' : {
-        'clientID' : 'quegauchoqueekenny',
-        'clientSecret' : 'ladelprimerojota',
+        'clientID' : 'pacopacopacopaco',
+        'clientSecret' : 'pedropedropedropedro',
         'callbackURL' : 'http://localhost:8080/auth/google/callback'
     }
 };
