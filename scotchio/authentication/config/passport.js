@@ -94,12 +94,15 @@ module.exports = function(passport) {
       //poner en el app los datos de nuestra configuracion
       clientID : configAuth.facebookAuth.clientID,
       clientSecret : configAuth.facebookAuth.clientSecret,
-      callbackURL : configAuth.facebookAuth.callbackURL
+      callbackURL : configAuth.facebookAuth.callbackURL,
+      passReqToCallback : true
   },
       //facebook nos reenvia el token y el profile
       function(token, refreshToken, profile, done){
           //asincronico
           process.nextTick(function(){
+              //voy a chequear si el usuario esta logeado
+            if (!req.user) {
              //buscar en la base el usuario en base al facebook id
               Usuario.findOne({'facebook.id':profile.id}, function(err, user){
                  if (err)
@@ -127,6 +130,23 @@ module.exports = function(passport) {
                      });
                  }
               });
+            } else {
+                //el usuario esta logeado entonces vamos a linkear la cuenta
+                //sacar el usuario de la session
+                var user = req.user;
+                
+                //actualizar las credenciales actuales
+                user.facebook.id = profile.id;
+                user.facebook.token = token;
+                user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                user.facebook.email = profile.emails[0].value;
+                
+                user.save(function(err){
+                   if (err)
+                       throw err;
+                   return done(null, user);
+                });
+            }
           });
       }
   ));
@@ -135,10 +155,12 @@ module.exports = function(passport) {
   passport.use(new TwitterStrategy({
       consumerKey : configAuth.twitterAut.consumerKey,
       consumerSecret : configAuth.twitterAut.consumerSecret,
-      callbackURL : configAuth.twitterAut.callbackURL
+      callbackURL : configAuth.twitterAut.callbackURL,
+      passReqToCallback : true
   }, function(token, tokenSecret, profile, done){
       //codigo asincronico
       process.nextTick(function(){
+        if (!req.user) {
          Usuario.findOne({'twitter.id':profile.id}, function(err, user){
             if (err) {
                 return done(err);
@@ -161,6 +183,22 @@ module.exports = function(passport) {
                 });
             }
          });
+        } else {
+            //autorizar para agregar twitter a una cuenta existente
+            //linkear el usuario
+            var user = req.user;
+            user.twitter.id = profile.id;
+            user.twitter.token = token;
+            user.twitter.username = profile.username;
+            user.twitter.displayName = profile.displayName;
+            //guardar el usuario
+            user.save(function(err){
+               if (err) {
+                   throw err;
+               } 
+               return done(null, user);
+            });
+        }
       });
   }));
   
@@ -168,32 +206,47 @@ module.exports = function(passport) {
   passport.use('google',new GoogleStrategy({
     clientID : configAuth.googleAuth.clientID,
     clientSecret : configAuth.googleAuth.clientSecret,
-    callbackURL : configAuth.googleAuth.callbackURL
+    callbackURL : configAuth.googleAuth.callbackURL,
+    passReqToCallback : true
   }), function(token, refreshToken, profile, done){
     //realizarlo de forma asincronica
-        console.log('google strategy')
         process.nextTick(function() {
-            Usuario.findOne({'google.id': profile.id}, function(err, user) {
-                if (err)
-                    return done(err);
-                if (user) {
+            //chequear si el usuario esta logeado
+            if (!req.user) {
+                Usuario.findOne({'google.id': profile.id}, function(err, user) {
+                    if (err)
+                        return done(err);
+                    if (user) {
+                        return done(null, user);
+                    } else {
+                        //en caso de no estar creamos uno nuevo en la base de datos
+                        var newUser = new Usuario();
+                        newUser.google.id = profile.id;
+                        newUser.google.token = token;
+                        //nos quedamos con el primero
+                        newUser.google.email = profile.emails[0].value;
+                        newUser.google.name = profile.displayName;
+                        //guardar
+                        newUser.save(function(err){
+                           if (err)
+                               throw err;
+                           return done(null, newUser);
+                        });
+                    }
+                });
+            } else {
+                var user = req.user;
+                user.google.id = profile.id;
+                user.google.token = token;
+                user.google.email = profile.emails[0].value;
+                user.google.name = profile.displayName;
+                
+                user.save(function(err){
+                    if (err)
+                        throw err;
                     return done(null, user);
-                } else {
-                    //en caso de no estar creamos uno nuevo en la base de datos
-                    var newUser = new Usuario();
-                    newUser.google.id = profile.id;
-                    newUser.google.token = token;
-                    //nos quedamos con el primero
-                    newUser.google.email = profile.emails[0].value;
-                    newUser.google.name = profile.displayName;
-                    //guardar
-                    newUser.save(function(err){
-                       if (err)
-                           throw err;
-                       return done(null, newUser);
-                    });
-                }
-            });
+                });
+            }
         });
     
   });

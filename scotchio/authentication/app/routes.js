@@ -70,6 +70,44 @@ module.exports = function(app, passport) {
      req.logOut();
      res.redirect('/');
   });
+  
+  //-- AUTORIZACION , el usuario esta logeado y quiere conectar a otras redes sociales
+  //local
+  app.get('/connect/local', function(req, res){
+     res.render('connect-local.ejs', {message: req.flash('loginMessage')}); 
+  });
+  app.post('/connect/local', passport.authenticate('local-signup', {
+      successRedirect: '/profile',
+      failureRedirect: '/connect/local', //redirecciona al login si existe algun error
+      failureFlash: true //permitir mensajes flash
+  }));
+  
+  //facebook
+  //enviar a facebook para autenticacion
+  app.get('/connect/facebook', passport.authorize('facebook', {scope : 'email'}));
+  //manejar el callback luego que facebook autorizo al usuario
+  app.get('/connect/facebook/callback', passport.authorize('facebook',{
+        successRedirect: '/profile',
+        failureRedirect: '/'
+   }));
+   
+   //twitter
+  app.get('/connect/twitter', passport.authorize('twitter', {scope : 'email'}));
+  app.get('/connect/twitter/callback', passport.authorize('twitter', {
+      successRedirect: '/profile',
+      failureRedirect: '/'
+  }));
+  
+  //google
+  app.get('/connect/google', passport.authorize('google', {scope: [
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email'
+  ]}));
+  app.get('/connect/google/callback', passport.authorize('google', {
+      successRedirect: '/profile',
+      failureRedirect: '/'
+  }));
+  // -- AUTORIZACION
 };
 
 //router middleware para chequear de que el usuario este logeado

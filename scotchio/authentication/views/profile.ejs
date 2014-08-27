@@ -22,56 +22,75 @@
             
             <div class="row">
                 <!-- Informacion Local -->
-		        <div class="col-sm-6">
-			        <div class="well">
-				        <h3><span class="fa fa-user"></span> Local</h3>
-					    <p>
-						    <strong>id</strong>: <%= user._id %><br>
-						    <strong>email</strong>: <%= user.local.email %><br>
-						    <strong>password</strong>: <%= user.local.password %>
-					    </p>
-			        </div>
-		        </div>
-            </div>
-            <div class="row">
+                <div class="col-sm-6">
+                        <div class="well">
+                                <h3><span class="fa fa-user"></span> Local</h3>
+                                <% if (user.local.email) { %>
+                                    <p>
+                                            <strong>id</strong>: <%= user._id %><br>
+                                            <strong>email</strong>: <%= user.local.email %><br>
+                                            <strong>password</strong>: <%= user.local.password %>
+                                    </p>
+                                    <a href="/unlink/local" class="btn btn-default">Desconectar</a>
+                                <% } else { %>
+                                    <a href="/connect/local" class="btn btn-default">Conectar</a>
+                                <% } %>
+                        </div>
+                </div>
+            
                 <!-- Informacion de Facebook -->
                 <div class="col-sm-6">
                     <div class="well">
                         <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-                        <p>
-                            <strong>id</strong>: <%= user.facebook.id %>
-                            <strong>token</strong>: <%= user.facebook.token %>
-                            <strong>email</strong>: <%= user.facebook.email %>
-                            <strong>name</strong>: <%= user.facebook.name %>
-                        </p>
+                        <% if (user.facebook.token) { %>
+                            <p>
+                                <strong>id</strong>: <%= user.facebook.id %>
+                                <strong>token</strong>: <%= user.facebook.token %>
+                                <strong>email</strong>: <%= user.facebook.email %>
+                                <strong>name</strong>: <%= user.facebook.name %>
+                            </p>
+                            <a href="/unlink/facebook" class="btn btn-default">Desconectar</a>
+                        <% } else { %>
+                            <a href="/connect/facebook" class="btn btn-default">Conectar</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
+            
             <div class="row">
                 <!-- Informacion de Twitter -->
                 <div class="col-sm-6">
                     <div class="well">
                         <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
-                        <p>
-                            <strong>id</strong>: <%= user.twitter.id %>
-                            <strong>token</strong>: <%= user.twitter.token %>
-                            <strong>username</strong>: <%= user.twitter.username %>
-                            <strong>displayName</strong>: <%= user.twitter.displayName %>
-                        </p>
+                        <% if (user.twitter.token) { %>
+                            <p>
+                                <strong>id</strong>: <%= user.twitter.id %>
+                                <strong>token</strong>: <%= user.twitter.token %>
+                                <strong>username</strong>: <%= user.twitter.username %>
+                                <strong>displayName</strong>: <%= user.twitter.displayName %>
+                            </p>
+                            <a href="/unlink/twitter" class="btn btn-default">Desconectar</a>
+                        <% } else { %>
+                            <a href="/connect/twitter" class="btn btn-default">Conectar</a>
+                        <% } %>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+            
                 <!-- Google -->
                 <div class="col-sm-6">
                     <div class="well">
-                        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
-                        <p>
-                            <strong>id</strong>: <%= user.google.id %>
-                            <strong>token</strong>: <%= user.google.token %>
-                            <strong>email</strong>: <%= user.google.email %>
-                            <strong>name</strong>: <%= user.google.name %>
-                        </p>
+                        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+                        <% if (user.google.token) { %>
+                            <p>
+                                <strong>id</strong>: <%= user.google.id %>
+                                <strong>token</strong>: <%= user.google.token %>
+                                <strong>email</strong>: <%= user.google.email %>
+                                <strong>name</strong>: <%= user.google.name %>
+                            </p>
+                            <a href="/unlink/google" class="btn btn-default">Desconectar</a>
+                        <% } else { %>
+                            <a href="/connect/google" class="btn btn-default">Conectar</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
