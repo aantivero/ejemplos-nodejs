@@ -6,6 +6,8 @@
 var LocalStrategy = require('passport-local').Strategy;
 //facebook strategy
 var FacebookStrategy = require('passport-facebook').Strategy;
+//twitter strategy
+var TwitterStrategy = require('passport-twitter').Strategy;
 
 //cargar el usuario
 var Usuario = require('../app/models/usuario');
@@ -125,5 +127,38 @@ module.exports = function(passport) {
               });
           });
       }
-  ))
+  ));
+
+  //--Twitter Strategy
+  passport.use(new TwitterStrategy({
+      consumerKey : configAuth.twitterAut.consumerKey,
+      consumerSecret : configAuth.twitterAut.consumerSecret,
+      callbackURL : configAuth.twitterAut.callbackURL
+  }, function(token, tokenSecret, profile, done){
+      //codigo asincronico
+      process.nextTick(function(){
+         Usuario.findOne({'twitter.id':profile.id}, function(err, user){
+            if (err) {
+                return done(err);
+            }
+            if (user) {
+                return done(null, user);
+            }else{
+                var newUser = new Usuario();
+                //seter toda la data que necesito
+                newUser.twitter.id = profile.id;
+                newUser.twitter.token = token;
+                newUser.twitter.username = profile.username;
+                newUser.twitter.displayName = profile.displayName;
+                //guardar el nuevo usuario
+                newUser.save(function(err){
+                   if (err) {
+                       throw err;
+                   }
+                   return done(null, newUser);
+                });
+            }
+         });
+      });
+  }));
 };
