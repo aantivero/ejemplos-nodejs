@@ -16,7 +16,12 @@ var morgan = require('morgan');
 var db = require('./config/db');
 
 var port = process.env.PORT || 8080;
-//mongoose.connect(db.url); //descomentar cuando ingresamos la coneccion
+mongoose.connect(db.url); //descomentar cuando ingresamos la coneccion
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'error en la coneccion db'));
+db.on('open', function callback(){
+    console.log('la coneccion esta abierta');
+});
 
 //logs
 app.use(morgan('dev'));

@@ -3,4 +3,4 @@
  */
 angular.module('GeekCtrl', []).controller('GeekController', function($scope){
     $scope.tagline = 'Este es un llamado al Geek';
-})
+});

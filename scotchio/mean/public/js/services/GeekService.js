@@ -5,16 +5,17 @@
 angular.module('GeekService', []).factory('Geek', ['$http', function($http){
 
     return {
-        //get all para obtener el resu
+        //get all para obtener el resultado
         get: function(){
-
+            return $http.get('/api/geeks');
         },
+        //llamar al post y crear un nuevo Geek
         create: function(geekData){
             return $http.post('/api/geeks', geekData);
-        }
-        //eliminar una secj
-        delete {
-
+        },
+        //eliminar una geek
+        delete: function(id) {
+            return $http.delete('/api/geeks/'+id);
         }
     }
 }]);
