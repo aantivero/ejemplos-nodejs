@@ -98,7 +98,7 @@ module.exports = function(passport) {
       passReqToCallback : true
   },
       //facebook nos reenvia el token y el profile
-      function(token, refreshToken, profile, done){
+      function(req, token, refreshToken, profile, done){
           //asincronico
           process.nextTick(function(){
               //voy a chequear si el usuario esta logeado
@@ -108,6 +108,19 @@ module.exports = function(passport) {
                  if (err)
                     return done(err);
                  if (user) {
+                     //si existe el id pero no tiene token quiere decir que el usuario se desconecto
+                     //por lo tanto vamos agregar el token y la informacion
+                     if (!user.facebook.token) {
+                         user.facebook.token = token;
+                         user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                         user.facebook.email = profile.emails[0].value;
+                         user.save(function(err){
+                            if (err) {
+                                throw err;
+                            }
+                            return done(null, user);
+                         });
+                     }
                      //si lo encuentra vamos a retornar el usuario
                      return done(null, user);
                  } else {
@@ -157,7 +170,7 @@ module.exports = function(passport) {
       consumerSecret : configAuth.twitterAut.consumerSecret,
       callbackURL : configAuth.twitterAut.callbackURL,
       passReqToCallback : true
-  }, function(token, tokenSecret, profile, done){
+  }, function(req, token, tokenSecret, profile, done){
       //codigo asincronico
       process.nextTick(function(){
         if (!req.user) {
@@ -166,6 +179,19 @@ module.exports = function(passport) {
                 return done(err);
             }
             if (user) {
+                //si lo encuentra por el id pero no tiene token quiere decir que desconecto la cuenta
+                //por lo tanto vamos a guardar el token y lo relacionado con esta
+                if (!user.twitter.token) {
+                    user.twitter.token = token;
+                    user.twitter.username = profile.username;
+                    user.twitter.displayName = profile.displayName;
+                    user.save(function(err){
+                       if (err) {
+                           throw err;
+                       }
+                       return done(null, user);
+                    });
+                }
                 return done(null, user);
             }else{
                 var newUser = new Usuario();
@@ -208,7 +234,7 @@ module.exports = function(passport) {
     clientSecret : configAuth.googleAuth.clientSecret,
     callbackURL : configAuth.googleAuth.callbackURL,
     passReqToCallback : true
-  }), function(token, refreshToken, profile, done){
+  }), function(req, token, refreshToken, profile, done){
     //realizarlo de forma asincronica
         process.nextTick(function() {
             //chequear si el usuario esta logeado
@@ -217,6 +243,18 @@ module.exports = function(passport) {
                     if (err)
                         return done(err);
                     if (user) {
+                        //chequear que el usuario tenga token sino cargar los datos correspondientes
+                        if (!user.google.token) {
+                            user.google.token = token;
+                            user.google.email = profile.emails[0].value;
+                            user.google.name = profile.displayName;
+                            user.save(function(err){
+                               if (err) {
+                                   throw err;
+                               }
+                               return done(null, user);
+                            });
+                        }
                         return done(null, user);
                     } else {
                         //en caso de no estar creamos uno nuevo en la base de datos
