@@ -1,0 +1,25 @@
+{
+  "name": "node-tareas",
+  "version": "0.0.0",
+  "description": "Aplicacion de Tareas con Node.js, MongoDB, AngularJS y Express.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "MEAN",
+    "Node.js",
+    "AngularJS",
+    "ExpressJS",
+    "MongoDB"
+  ],
+  "author": "Alejandro Antivero",
+  "license": "BSD",
+  "dependencies": {
+    "body-parser": "^1.6.7",
+    "express": "^4.8.7",
+    "method-override": "^2.1.3",
+    "mongoose": "^3.8.15",
+    "morgan": "^1.2.3"
+  }
+}
