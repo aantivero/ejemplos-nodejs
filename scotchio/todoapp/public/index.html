@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="tareaApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manejo de Tareas</title>
+    
+    <style>
+        html {
+            overflow-y: scroll; 
+        }
+        body {
+            padding-top: 50px;
+        }
+        #tarea-list {
+            margin-bottom: 30px;
+        }
+    </style>
+    <script src="main.js"></script>    
+</head>
+<body ng-controller="mainController">
+    <div class="container">
+        <!-- HEADER -->
+        <div class="jumbotron text-center">
+            <h1>Tareas <span class="label label-info">{{tareas.length}}</span></h1>
+        </div>
+        <!-- Lista de Tareas -->
+        <div class="row" id="tarea-list">
+            <div class="col-sm-4 col-sm-offset-4">
+                <!-- loop en la lista de tareas -->
+                <div class="checkbox" ng-repeat="tarea in tareas">
+                    <label>
+                        <input type="checkbox" ng-click="borrarTarea(tarea._id)">{{tarea.descripcion}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!-- Formulario parar crear tareas -->
+        <div class="row" id="tarea-form">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+                        <!-- un bind del valor a formData.descripcion en Angular -->
+                        <input type="text" class="form-control input-lg text-center" placeholder="Tare que realizare" ng-model="formData.descripcion">
+                    </div>
+                    <!-- boton crear tareas -->
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="crearTarea()">Agregar</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
